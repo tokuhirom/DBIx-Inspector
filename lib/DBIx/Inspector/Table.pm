@@ -61,7 +61,7 @@ sub pk_foreign_keys {
         }
     }
     my $iter = DBIx::Inspector::Iterator->new(
-        callback => sub { $self->_create_foreign_key( $_[0] ) },
+        callback => sub { $self->inspector->create_foreign_key( $_[0] ) },
         sth      => $sth,
     );
     return wantarray ? $iter->all : $iter;
@@ -87,18 +87,11 @@ sub fk_foreign_keys {
         }
     }
     my $iter = DBIx::Inspector::Iterator->new(
-        callback => sub { $self->_create_foreign_key($_[0]) },
+        callback => sub { $self->inspector->create_foreign_key($_[0]) },
         skip_cb  => sub { $_[0]->{FK_NAME} eq 'PRIMARY' }, # XXX DBD::mysql has a bug
         sth =>$sth,
     );
     return wantarray ? $iter->all : $iter;
-}
-
-sub _create_foreign_key {
-    my ($self, $src) = @_;
-    my $driver = $self->inspector->driver;
-    my $klass = $driver eq 'Pg' ? 'DBIx::Inspector::ForeignKey::Pg' : 'DBIx::Inspector::ForeignKey';
-    return $klass->new(inspector => $self, %$src);
 }
 
 sub name    { $_[0]->{TABLE_NAME} }

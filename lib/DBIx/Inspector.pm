@@ -44,6 +44,14 @@ sub table {
     return $self->tables($table)->next;
 }
 
+sub create_foreign_key {
+    my ($self, $src) = @_;
+    my $driver = $self->driver;
+    my $klass = $driver eq 'Pg' ? 'DBIx::Inspector::ForeignKey::Pg' : 'DBIx::Inspector::ForeignKey';
+    return $klass->new(inspector => $self, %$src);
+}
+
+
 1;
 __END__
 
