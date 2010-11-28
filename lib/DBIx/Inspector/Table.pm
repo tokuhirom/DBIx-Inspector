@@ -24,6 +24,11 @@ sub columns {
     return wantarray ? $iter->all : $iter;
 }
 
+sub column {
+    my ($self, $column) = @_;
+    return $self->columns($column)->next;
+}
+
 sub primary_key {
     my $self = shift;
     my $sth = $self->inspector->dbh->primary_key_info( $self->inspector->catalog, $self->inspector->schema, $self->name );

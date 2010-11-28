@@ -26,6 +26,20 @@ $dbh->do(q{
     );
 });
 $dbh->do(q{
+CREATE TABLE artist(
+    artistid    INTEGER PRIMARY KEY, 
+    artistname  TEXT
+);
+});
+$dbh->do(q{
+CREATE TABLE track(
+    trackid     INTEGER,
+    trackname   TEXT, 
+    trackartist INTEGER     -- Must map to an artist.artistid!
+    FOREIGN KEY(trackartist) REFERENCES artist(artistid)
+);
+});
+$dbh->do(q{
     CREATE TEMPORARY TABLE t1 (a,b);
 });
 $dbh->do(q{
@@ -33,15 +47,34 @@ $dbh->do(q{
 });
 my $inspector = DBIx::Inspector->new(dbh => $dbh);
 my @tables = $inspector->tables();
-is(join(",", sort map { $_->name } @tables), 'mk,post,user');
+is(join(",", sort map { $_->name } @tables), 'artist,mk,post,track,user');
 my ($post) = $inspector->tables('post');
 ok $post;
 is(join(',', sort map { $_->name } $post->columns), 'body,post_id,user_id');
 is(join(',', sort map { $_->name } $post->primary_key), 'post_id');
+subtest 'columns' => sub {
+    subtest 'body' => sub {
+        my $col = $post->column('body');
+        is $col->data_type, undef;
+        is $col->type_name, 'varchar';
+        is $col->column_size, 255;
+        is $col->column_def, undef;
+    };
+    subtest 'user_id' => sub {
+        my $col = $post->column('user_id');
+        is $col->data_type, undef;
+        is $col->type_name, 'int';
+        is $col->column_size, undef;
+        is $col->column_def, undef;
+    };
+};
 
-my ($mk) = grep { $_->name eq 'mk' } @tables;
-ok $mk;
-is(join(',', sort map { $_->name } $mk->primary_key), 'k1,k2');
+subtest 'multiple pk' => sub {
+    my $mk = $inspector->table('mk');
+    ok $mk;
+    is(join(',', sort map { $_->name } $mk->primary_key), 'k1,k2');
+};
+
 
 done_testing;
 

@@ -37,6 +37,12 @@ sub tables {
     return wantarray ? $iter->all : $iter;
 }
 
+sub table {
+    my ($self, $table) = @_;
+    Carp::croak("missing mandatory parameter: table") unless defined $table;
+    return $self->tables($table)->next;
+}
+
 1;
 __END__
 
