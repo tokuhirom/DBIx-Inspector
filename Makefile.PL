@@ -6,11 +6,7 @@ name 'DBIx-Inspector';
 all_from 'lib/DBIx/Inspector.pm';
 readme_markdown_from 'lib/DBIx/Inspector.pm';
 
-# requires '';
-# requires 'Exporter' => 5.63; # use Exporter 'import';
-# requires 'Plack' =>  0.9949;
-
-
+requires 'DBI';
 
 tests 't/*.t t/*/*.t t/*/*/*.t t/*/*/*/*.t';
 test_requires 'Test::More' => 0.96; # done_testing, subtest

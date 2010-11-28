@@ -3,8 +3,41 @@ use strict;
 use warnings;
 use 5.008001;
 our $VERSION = '0.01';
+use Class::Accessor::Lite;
+Class::Accessor::Lite->mk_accessors(qw/dbh catalog schema/);
+use Carp ();
 
+sub new {
+    my $class = shift;
+    my %args = @_ == 1 ? %{ $_[0] } : @_;
+    my $dbh = $args{dbh};
+    Carp::croak("missing mandatory parameter: dbh") unless $dbh;
+    my $driver = $dbh->{Driver}->{Name};
+    if ($driver eq 'Pg' && !exists $args{schema}) {
+        $args{schema} = 'public';
+    }
+    return bless {catalog => undef, %args}, $class;
+}
 
+sub tables {
+    my $self = shift;
+
+    my $sth = $self->{dbh}->table_info( $self->catalog, $self->schema, my $table=undef, my $type='TABLE' );
+    return map { $_->{TABLE_NAME} }  @{ $sth->fetchall_arrayref( {} ) };
+}
+
+sub columns_for {
+    my ( $self, $table ) = @_;
+
+    my $sth = $self->dbh->column_info( $self->catalog, $self->schema, $table, '%' );
+    return map { $_->{COLUMN_NAME} } @{$sth->fetchall_arrayref(+{})};
+}
+
+sub pk_for {
+    my ( $self, $table ) = @_;
+    my @keys = $self->{dbh}->primary_key( $self->catalog, $self->schema, $table );
+    return @keys;
+}
 
 1;
 __END__
