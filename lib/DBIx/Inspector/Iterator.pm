@@ -21,11 +21,6 @@ sub next {
     }
 }
 
-sub first {
-    my $self = shift;
-    $self->next;
-}
-
 sub all {
     my $self = shift;
     my @rows;

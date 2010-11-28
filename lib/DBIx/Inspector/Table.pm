@@ -13,9 +13,10 @@ sub new {
 }
 
 sub columns {
-    my $self = shift;
+    my ($self, $column) = @_;
+    $column = '%' if not defined $column;
 
-    my $sth = $self->inspector->dbh->column_info( $self->inspector->catalog, $self->inspector->schema, $self->name, '%' );
+    my $sth = $self->inspector->dbh->column_info( $self->inspector->catalog, $self->inspector->schema, $self->name, $column );
     my $iter = DBIx::Inspector::Iterator->new(
         callback => sub { DBIx::Inspector::Column->new(table => $self, %{$_[0]}) },
         sth =>$sth,
