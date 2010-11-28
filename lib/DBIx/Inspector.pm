@@ -33,7 +33,21 @@ DBIx::Inspector -
 
 =head1 SYNOPSIS
 
-  use DBIx::Inspector;
+    use DBIx::Inspector;
+
+    my $dbh = DBI->connect(...) or die;
+    my $inspector = DBIx::Inspector->new(dbh => $dbh);
+    my @tables = $inspector->tables;
+    for my $table (@tables) {
+        print "  pk:\n";
+        for my $pk ($table->primary_key) {
+            print "    ", $pk->name, "\n";
+        }
+        print "  columns:\n";
+        for my $column ($table->columns) {
+            print "    ", $column->name, "\n";
+        }
+    }
 
 =head1 DESCRIPTION
 
