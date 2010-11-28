@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use utf8;
 use Class::Accessor::Lite;
-Class::Accessor::Lite->mk_accessors(qw/table/);
+Class::Accessor::Lite->mk_accessors(qw/inspector/);
 
 sub new {
     my $class = shift;

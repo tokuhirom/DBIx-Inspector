@@ -9,48 +9,18 @@ use Carp ();
 use DBIx::Inspector::Table;
 use DBIx::Inspector::Iterator;
 use DBIx::Inspector::ForeignKey;
+use Class::Load;
 
 sub new {
     my $class = shift;
     my %args = @_ == 1 ? %{ $_[0] } : @_;
     my $dbh = $args{dbh};
     Carp::croak("missing mandatory parameter: dbh") unless $dbh;
-    my $driver = $dbh->{Driver}->{Name};
-
-    # default schema name for Pg is 'public'
-    if (not exists $args{schema}) {
-        if ($driver eq 'Pg') {
-            $args{schema} = 'public';
-        }
-    }
-    return bless {driver => $driver, catalog => undef, %args}, $class;
+    my $driver_name = $dbh->{Driver}->{Name};
+    my $driver_class = "$class\::Driver::$driver_name";
+    Class::Load::load_class($driver_class);
+    return $driver_class->new(%args);
 }
-
-sub tables {
-    my ($self, $table) = @_;
-
-    my $sth = $self->{dbh}->table_info( $self->catalog, $self->schema, $table, my $type='TABLE' );
-
-    my $iter = DBIx::Inspector::Iterator->new(
-        callback => sub { DBIx::Inspector::Table->new(inspector => $self, %{$_[0]}) },
-        sth =>$sth,
-    );
-    return wantarray ? $iter->all : $iter;
-}
-
-sub table {
-    my ($self, $table) = @_;
-    Carp::croak("missing mandatory parameter: table") unless defined $table;
-    return $self->tables($table)->next;
-}
-
-sub create_foreign_key {
-    my ($self, $src) = @_;
-    my $driver = $self->driver;
-    my $klass = $driver eq 'Pg' ? 'DBIx::Inspector::ForeignKey::Pg' : 'DBIx::Inspector::ForeignKey';
-    return $klass->new(inspector => $self, %$src);
-}
-
 
 1;
 __END__

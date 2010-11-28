@@ -16,14 +16,7 @@ sub new {
 
 sub columns {
     my ($self, $column) = @_;
-    $column = '%' if not defined $column;
-
-    my $sth = $self->inspector->dbh->column_info( $self->inspector->catalog, $self->inspector->schema, $self->name, $column );
-    my $iter = DBIx::Inspector::Iterator->new(
-        callback => sub { DBIx::Inspector::Column->new(table => $self, %{$_[0]}) },
-        sth =>$sth,
-    );
-    return wantarray ? $iter->all : $iter;
+    return $self->inspector->columns($self->name, $column);
 }
 
 sub column {
@@ -33,18 +26,13 @@ sub column {
 
 sub primary_key {
     my $self = shift;
-    my $sth = $self->inspector->dbh->primary_key_info( $self->inspector->catalog, $self->inspector->schema, $self->name );
-    my $iter = DBIx::Inspector::Iterator->new(
-        callback => sub { DBIx::Inspector::Column->new(table => $self, %{$_[0]}) },
-        sth =>$sth,
-    );
-    return wantarray ? $iter->all : $iter;
+    return $self->inspector->primary_key($self->name);
 }
 
 sub pk_foreign_keys {
     my ($self, $opt) = @_;
 
-    my $sth = $self->inspector->dbh->foreign_key_info(
+    return $self->inspector->foreign_keys(
         $self->inspector->catalog,
         $self->inspector->schema,
         $self->name,
@@ -52,25 +40,12 @@ sub pk_foreign_keys {
         $opt->{fk_schema}  || $self->inspector->schema,
         $opt->{fk_table},
     );
-    if (!$sth) {
-        if ($self->inspector->driver eq 'Pg') {
-            # DBD::Pg returns undef when not matched
-            return DBIx::Inspector::Iterator::Null->new();
-        } else {
-            Carp::croak($self->inspector->dbh->errstr);
-        }
-    }
-    my $iter = DBIx::Inspector::Iterator->new(
-        callback => sub { $self->inspector->create_foreign_key( $_[0] ) },
-        sth      => $sth,
-    );
-    return wantarray ? $iter->all : $iter;
 }
 
 sub fk_foreign_keys {
     my ($self, $opt) = @_;
 
-    my $sth = $self->inspector->dbh->foreign_key_info(
+    return $self->inspector->foreign_keys(
         $opt->{pk_catalog} || $self->inspector->catalog,
         $opt->{pk_schema}  || $self->inspector->schema,
         $opt->{pk_table},
@@ -78,20 +53,6 @@ sub fk_foreign_keys {
         $self->inspector->schema,
         $self->name
     );
-    if (!$sth) {
-        if ($self->inspector->driver eq 'Pg') {
-            # DBD::Pg returns undef when not matched
-            return DBIx::Inspector::Iterator::Null->new();
-        } else {
-            Carp::croak($self->inspector->dbh->errstr);
-        }
-    }
-    my $iter = DBIx::Inspector::Iterator->new(
-        callback => sub { $self->inspector->create_foreign_key($_[0]) },
-        skip_cb  => sub { $_[0]->{FK_NAME} eq 'PRIMARY' }, # XXX DBD::mysql has a bug
-        sth =>$sth,
-    );
-    return wantarray ? $iter->all : $iter;
 }
 
 sub name    { $_[0]->{TABLE_NAME} }
