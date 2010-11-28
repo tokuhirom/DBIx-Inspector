@@ -16,17 +16,21 @@ sub columns {
     my $self = shift;
 
     my $sth = $self->inspector->dbh->column_info( $self->inspector->catalog, $self->inspector->schema, $self->name, '%' );
-    return
-      map { DBIx::Inspector::Column->new( table => $self, %$_ ) }
-      @{ $sth->fetchall_arrayref( +{} ) };
+    my $iter = DBIx::Inspector::Iterator->new(
+        callback => sub { DBIx::Inspector::Column->new(table => $self, %{$_[0]}) },
+        sth =>$sth,
+    );
+    return wantarray ? $iter->all : $iter;
 }
 
 sub primary_key {
     my $self = shift;
     my $sth = $self->inspector->dbh->primary_key_info( $self->inspector->catalog, $self->inspector->schema, $self->name );
-    return
-      map { DBIx::Inspector::Column->new( table => $self, %$_ ) }
-      @{ $sth->fetchall_arrayref( +{} ) };
+    my $iter = DBIx::Inspector::Iterator->new(
+        callback => sub { DBIx::Inspector::Column->new(table => $self, %{$_[0]}) },
+        sth =>$sth,
+    );
+    return wantarray ? $iter->all : $iter;
 }
 
 sub name    { $_[0]->{TABLE_NAME} }

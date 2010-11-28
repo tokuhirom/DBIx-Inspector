@@ -34,7 +34,7 @@ $dbh->do(q{
 my $inspector = DBIx::Inspector->new(dbh => $dbh);
 my @tables = $inspector->tables();
 is(join(",", sort map { $_->name } @tables), 'mk,post,user');
-my ($post) = grep { $_->name eq 'post' } @tables;
+my ($post) = $inspector->tables('post');
 ok $post;
 is(join(',', sort map { $_->name } $post->columns), 'body,post_id,user_id');
 is(join(',', sort map { $_->name } $post->primary_key), 'post_id');

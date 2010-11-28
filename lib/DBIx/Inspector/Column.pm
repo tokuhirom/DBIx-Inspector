@@ -11,6 +11,7 @@ sub new {
     bless {%args}, $class;
 }
 
-sub name { $_[0]->{COLUMN_NAME} }
+sub name      { $_[0]->{COLUMN_NAME} }
+sub data_type { $_[0]->{DATA_TYPE} }
 
 1;

@@ -7,6 +7,7 @@ use Class::Accessor::Lite;
 Class::Accessor::Lite->mk_accessors(qw/dbh catalog schema/);
 use Carp ();
 use DBIx::Inspector::Table;
+use DBIx::Inspector::Iterator;
 
 sub new {
     my $class = shift;
@@ -25,12 +26,15 @@ sub new {
 }
 
 sub tables {
-    my $self = shift;
+    my ($self, $table) = @_;
 
-    my $sth = $self->{dbh}->table_info( $self->catalog, $self->schema, my $table=undef, my $type='TABLE' );
-    return
-      map { DBIx::Inspector::Table->new( inspector => $self, %{$_} ) }
-      @{ $sth->fetchall_arrayref( {} ) };
+    my $sth = $self->{dbh}->table_info( $self->catalog, $self->schema, $table, my $type='TABLE' );
+
+    my $iter = DBIx::Inspector::Iterator->new(
+        callback => sub { DBIx::Inspector::Table->new(inspector => $self, %{$_[0]}) },
+        sth =>$sth,
+    );
+    return wantarray ? $iter->all : $iter;
 }
 
 1;
