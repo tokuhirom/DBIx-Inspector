@@ -4,10 +4,11 @@ use warnings;
 use 5.008001;
 our $VERSION = '0.01';
 use Class::Accessor::Lite;
-Class::Accessor::Lite->mk_accessors(qw/dbh catalog schema/);
+Class::Accessor::Lite->mk_accessors(qw/dbh catalog schema driver/);
 use Carp ();
 use DBIx::Inspector::Table;
 use DBIx::Inspector::Iterator;
+use DBIx::Inspector::ForeignKey;
 
 sub new {
     my $class = shift;
@@ -22,7 +23,7 @@ sub new {
             $args{schema} = 'public';
         }
     }
-    return bless {catalog => undef, %args}, $class;
+    return bless {driver => $driver, catalog => undef, %args}, $class;
 }
 
 sub tables {

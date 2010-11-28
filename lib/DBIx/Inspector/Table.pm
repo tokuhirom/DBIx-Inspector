@@ -5,6 +5,8 @@ use utf8;
 use Class::Accessor::Lite;
 Class::Accessor::Lite->mk_accessors(qw/inspector/);
 use DBIx::Inspector::Column;
+use DBIx::Inspector::ForeignKey::Pg;
+use DBIx::Inspector::Iterator::Null;
 
 sub new {
     my $class = shift;
@@ -37,6 +39,66 @@ sub primary_key {
         sth =>$sth,
     );
     return wantarray ? $iter->all : $iter;
+}
+
+sub pk_foreign_keys {
+    my ($self, $opt) = @_;
+
+    my $sth = $self->inspector->dbh->foreign_key_info(
+        $self->inspector->catalog,
+        $self->inspector->schema,
+        $self->name,
+        $opt->{fk_catalog} || $self->inspector->catalog,
+        $opt->{fk_schema}  || $self->inspector->schema,
+        $opt->{fk_table},
+    );
+    if (!$sth) {
+        if ($self->inspector->driver eq 'Pg') {
+            # DBD::Pg returns undef when not matched
+            return DBIx::Inspector::Iterator::Null->new();
+        } else {
+            Carp::croak($self->inspector->dbh->errstr);
+        }
+    }
+    my $iter = DBIx::Inspector::Iterator->new(
+        callback => sub { $self->_create_foreign_key( $_[0] ) },
+        sth      => $sth,
+    );
+    return wantarray ? $iter->all : $iter;
+}
+
+sub fk_foreign_keys {
+    my ($self, $opt) = @_;
+
+    my $sth = $self->inspector->dbh->foreign_key_info(
+        $opt->{pk_catalog} || $self->inspector->catalog,
+        $opt->{pk_schema}  || $self->inspector->schema,
+        $opt->{pk_table},
+        $self->inspector->catalog,
+        $self->inspector->schema,
+        $self->name
+    );
+    if (!$sth) {
+        if ($self->inspector->driver eq 'Pg') {
+            # DBD::Pg returns undef when not matched
+            return DBIx::Inspector::Iterator::Null->new();
+        } else {
+            Carp::croak($self->inspector->dbh->errstr);
+        }
+    }
+    my $iter = DBIx::Inspector::Iterator->new(
+        callback => sub { $self->_create_foreign_key($_[0]) },
+        skip_cb  => sub { $_[0]->{FK_NAME} eq 'PRIMARY' }, # XXX DBD::mysql has a bug
+        sth =>$sth,
+    );
+    return wantarray ? $iter->all : $iter;
+}
+
+sub _create_foreign_key {
+    my ($self, $src) = @_;
+    my $driver = $self->inspector->driver;
+    my $klass = $driver eq 'Pg' ? 'DBIx::Inspector::ForeignKey::Pg' : 'DBIx::Inspector::ForeignKey';
+    return $klass->new(inspector => $self, %$src);
 }
 
 sub name    { $_[0]->{TABLE_NAME} }

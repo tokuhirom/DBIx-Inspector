@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use utf8;
 use Class::Accessor::Lite;
-Class::Accessor::Lite->mk_accessors(qw/sth callback/);
+Class::Accessor::Lite->mk_accessors(qw/sth callback skip_cb/);
 
 sub new {
     my $class = shift;
@@ -15,6 +15,9 @@ sub next {
     my $self = shift;
 
     if (my $row = $self->sth->fetchrow_hashref()) {
+        if ($self->skip_cb && $self->skip_cb->($row)) {
+            return $self->next();
+        }
         $self->callback->($row);
     } else {
         return;
@@ -27,7 +30,7 @@ sub all {
     while (my $row = $self->next) {
         push @rows, $row;
     }
-    return wantarray ? @rows : \@rows;
+    return @rows;
 }
 
 1;

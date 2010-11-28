@@ -35,7 +35,7 @@ $dbh->do(q{
 CREATE TABLE track(
     trackid     INTEGER,
     trackname   TEXT, 
-    trackartist INTEGER     -- Must map to an artist.artistid!
+    trackartist INTEGER,    -- Must map to an artist.artistid!
     FOREIGN KEY(trackartist) REFERENCES artist(artistid)
 );
 });
@@ -74,7 +74,6 @@ subtest 'multiple pk' => sub {
     ok $mk;
     is(join(',', sort map { $_->name } $mk->primary_key), 'k1,k2');
 };
-
 
 done_testing;
 
