@@ -6,6 +6,13 @@ use DBIx::Inspector;
 
 my $dbh = DBI->connect('dbi:SQLite:', '', '', {RaiseError => 1}) or die;
 $dbh->do(q{
+    create table mk (
+        k1 int,
+        k2 int,
+        PRIMARY KEY(k1, k2)
+    );
+});
+$dbh->do(q{
     create table post (
         post_id int unsigned not null primary key,
         user_id int,
@@ -25,9 +32,16 @@ $dbh->do(q{
     CREATE VIEW t2 AS SELECT * FROM user;
 });
 my $inspector = DBIx::Inspector->new(dbh => $dbh);
-is(join(",", sort $inspector->tables), 'post,user');
-is(join(',', sort $inspector->columns_for('post')), 'body,post_id,user_id');
-is(join(',', sort $inspector->pk_for('post')), 'post_id');
+my @tables = $inspector->tables();
+is(join(",", sort map { $_->name } @tables), 'mk,post,user');
+my ($post) = grep { $_->name eq 'post' } @tables;
+ok $post;
+is(join(',', sort map { $_->name } $post->columns), 'body,post_id,user_id');
+is(join(',', sort map { $_->name } $post->primary_key), 'post_id');
+
+my ($mk) = grep { $_->name eq 'mk' } @tables;
+ok $mk;
+is(join(',', sort map { $_->name } $mk->primary_key), 'k1,k2');
 
 done_testing;
 

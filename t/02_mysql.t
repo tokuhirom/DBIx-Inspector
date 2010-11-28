@@ -24,9 +24,13 @@ $dbh->do(q{
     );
 });
 my $inspector = DBIx::Inspector->new(dbh => $dbh);
-is(join(",", sort $inspector->tables), 'post,user');
-is(join(',', sort $inspector->columns_for('post')), 'body,post_id,user_id');
-is(join(',', sort $inspector->pk_for('post')), 'post_id');
+my @tables = $inspector->tables;
+is(join(",", sort map { $_->name } @tables), 'post,user');
+my ($post) = grep { $_->name eq 'post' } @tables;
+isa_ok $post, 'DBIx::Inspector::Table';
+ok $post;
+is(join(',', sort map { $_->name } $post->columns), 'body,post_id,user_id');
+is(join(',', sort map { $_->name } $post->primary_key), 'post_id');
 
 done_testing;
 
