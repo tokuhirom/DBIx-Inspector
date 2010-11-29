@@ -53,6 +53,8 @@ DBIx::Inspector - Get information from $dbh
 
 DBIx::Inspector is a inspector for $dbh.
 
+This is under development. B<Any API will change without notice.>
+
 =head1 METHODS
 
 =over 4

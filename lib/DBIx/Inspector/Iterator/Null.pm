@@ -13,4 +13,3 @@ sub next { undef }
 sub all  { return }
 
 1;
-

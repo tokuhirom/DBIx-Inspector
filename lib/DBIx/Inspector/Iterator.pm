@@ -34,4 +34,33 @@ sub all {
 }
 
 1;
+__END__
+
+=head1 NAME
+
+DBIx::Inspector::Iterator - iterator for DBIx::Inspector
+
+=head1 DESCRIPTION
+
+Iterator class for L<DBIx::Inspector>. This is very useful for saving memory space.
+
+=head1 METHODS
+
+=over 4
+
+=item my $row = $iter->next();
+
+Get next row.
+
+This method returns row object. Return undef if finihsed.
+
+=item my @rows = $iter->all;
+
+Get all elements in iterator at once.
+
+=back
+
+=head1 SEE ALSO
+
+L<DBIx::Inspector>
 
