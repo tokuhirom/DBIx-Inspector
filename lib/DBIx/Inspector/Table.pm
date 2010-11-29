@@ -61,4 +61,41 @@ sub schema  { $_[0]->{TABLE_SCHEM} }
 sub type    { $_[0]->{TABLE_TYPE} }
 
 1;
+__END__
+
+=head1 NAME
+
+DBIx::Inspector::Table - table object
+
+=head1 METHODS
+
+=over 4
+
+=item $table->catalog()
+
+=item $table->schema()
+
+=item $table->type()
+
+=item $table->name()
+
+Get each attribues.
+
+=item my @columns = $table->columns();
+
+Get L<DBIx::Inspector::Column> objects.
+
+=item my $column = $table->column($name);
+
+Get L<DBIx::Inspector::Column> object for $name.
+
+=item my @pk = $table->primary_key();
+
+Get L<DBIx::Inspector::Column> objects for primary keys.
+
+=back
+
+=head1 SEE ALSO
+
+L<DBIx::Inspector>
 
