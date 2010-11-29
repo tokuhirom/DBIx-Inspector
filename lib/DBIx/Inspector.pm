@@ -29,7 +29,7 @@ __END__
 
 =head1 NAME
 
-DBIx::Inspector -
+DBIx::Inspector - Get information from $dbh
 
 =head1 SYNOPSIS
 
@@ -51,13 +51,29 @@ DBIx::Inspector -
 
 =head1 DESCRIPTION
 
-DBIx::Inspector is
+DBIx::Inspector is a inspector for $dbh.
+
+=head1 METHODS
+
+=over 4
+
+=item my $inspector = DBIx::Inspector->new(dbh => $dbh);
+
+Create new instance of DBIx::Inspector.
+
+=item my @tables = $inspector->tables();
+
+Retrieve table objects from $dbh. Every elements in @tables is instance of L<DBIx::Inspector::Table>.
+
+=back
 
 =head1 AUTHOR
 
 Tokuhiro Matsuno E<lt>tokuhirom AAJKLFJEF GMAIL COME<gt>
 
 =head1 SEE ALSO
+
+L<DBI>
 
 =head1 LICENSE
 
