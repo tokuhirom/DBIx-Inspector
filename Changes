@@ -1,5 +1,10 @@
 Revision history for Perl extension DBIx::Inspector
 
+0.03
+
+        - fixed typo in docs
+        - use Module::Load instead of Class::Load
+
 0.02
 
         - fixed packaging
