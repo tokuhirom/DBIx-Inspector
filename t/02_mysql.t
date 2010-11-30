@@ -3,6 +3,7 @@ use warnings;
 use Test::More;
 use Test::Requires 'Test::mysqld', 'DBD::mysql';
 use DBIx::Inspector;
+plan skip_all => "skip tests unless \$ENV{TEST_MYSQL} is true" unless $ENV{TEST_MYSQL};
 
 my $mysqld = Test::mysqld->new(
     my_cnf => {
