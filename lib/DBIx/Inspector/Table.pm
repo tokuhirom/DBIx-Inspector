@@ -79,7 +79,7 @@ DBIx::Inspector::Table - table object
 
 =item $table->name()
 
-Get each attribues.
+Get each attributes.
 
 =item my @columns = $table->columns();
 

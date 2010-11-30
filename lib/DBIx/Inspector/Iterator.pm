@@ -52,7 +52,7 @@ Iterator class for L<DBIx::Inspector>. This is very useful for saving memory spa
 
 Get next row.
 
-This method returns row object. Return undef if finihsed.
+This method returns row object. Return undef if finished.
 
 =item my @rows = $iter->all;
 
