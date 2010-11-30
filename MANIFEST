@@ -12,11 +12,24 @@ inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
 inc/Pod/Markdown.pm
 lib/DBIx/Inspector.pm
+lib/DBIx/Inspector/Column.pm
+lib/DBIx/Inspector/Driver/Base.pm
+lib/DBIx/Inspector/Driver/mysql.pm
+lib/DBIx/Inspector/Driver/Pg.pm
+lib/DBIx/Inspector/Driver/SQLite.pm
+lib/DBIx/Inspector/ForeignKey.pm
+lib/DBIx/Inspector/ForeignKey/Pg.pm
+lib/DBIx/Inspector/Iterator.pm
+lib/DBIx/Inspector/Iterator/Null.pm
+lib/DBIx/Inspector/Table.pm
 Makefile.PL
 MANIFEST			This list of files
 META.yml
 README.mkdn
 t/00_compile.t
+t/01_sqlite3.t
+t/02_mysql.t
+t/03_pg.t
 xt/01_podspell.t
 xt/02_perlcritic.t
 xt/03_pod.t

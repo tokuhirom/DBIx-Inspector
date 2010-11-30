@@ -1,6 +1,6 @@
 # NAME
 
-DBIx::Inspector -
+DBIx::Inspector - Get information from $dbh
 
 # SYNOPSIS
 
@@ -22,13 +22,27 @@ DBIx::Inspector -
 
 # DESCRIPTION
 
-DBIx::Inspector is
+DBIx::Inspector is a inspector for $dbh.
+
+This is under development. __Any API will change without notice.__
+
+# METHODS
+
+- my $inspector = DBIx::Inspector->new(dbh => $dbh);
+
+Create new instance of DBIx::Inspector.
+
+- my @tables = $inspector->tables();
+
+Retrieve table objects from $dbh. Every elements in @tables is instance of [DBIx::Inspector::Table](http://search.cpan.org/perldoc?DBIx::Inspector::Table).
 
 # AUTHOR
 
 Tokuhiro Matsuno <tokuhirom AAJKLFJEF GMAIL COM>
 
 # SEE ALSO
+
+[DBI](http://search.cpan.org/perldoc?DBI)
 
 # LICENSE
 
