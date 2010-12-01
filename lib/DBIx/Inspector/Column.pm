@@ -11,6 +11,8 @@ sub new {
     bless {%args}, $class;
 }
 
+sub get { $_[0]->{$_[1]} }
+
 sub name        { $_[0]->{COLUMN_NAME} }
 sub column_name { $_[0]->{COLUMN_NAME} }
 sub data_type   { $_[0]->{DATA_TYPE} }
@@ -27,6 +29,16 @@ __END__
 =head1 NAME
 
 DBIx::Inspector::Column - column object
+
+=head1 METHODS
+
+=over 4
+
+=item $column->get($name)
+
+You can get the value of parameter. The $name is listed in DBI.pm.
+
+=back
 
 =head1 ATTRIBUTES
 
