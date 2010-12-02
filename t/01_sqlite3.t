@@ -75,5 +75,57 @@ subtest 'multiple pk' => sub {
     is(join(',', sort map { $_->name } $mk->primary_key), 'k1,k2');
 };
 
+subtest 'foreign key' => sub {
+    my $dbh = DBI->connect('dbi:SQLite:', '', '', {RaiseError => 1, 'mysql_multi_statements' => 1}) or die;
+    $dbh->do($_) for split /;/, q{
+        CREATE TABLE other (id INT NOT NULL, PRIMARY KEY (id));
+        CREATE TABLE parent(id INT NOT NULL, PRIMARY KEY (id));
+        CREATE TABLE child(id INT, parent_id INT,
+            FOREIGN KEY (parent_id) REFERENCES parent(id)
+        );
+        PRAGMA foreign_keys = ON;
+    };
+    my $inspector = DBIx::Inspector->new(dbh => $dbh);
+    my $parent = $inspector->table('parent');
+    {
+        my $iter = $inspector->table('parent')->pk_foreign_keys();
+        my $fk = $iter->next;
+        if (ok $fk, 'pk_foreign_keys') {
+            is $fk->pkcolumn_name, 'id';
+            is $fk->pktable_name, 'parent';
+            is $fk->fktable_name, 'child';
+            is $fk->fkcolumn_name, 'parent_id';
+            is $iter->next, undef;
+        }
+    }
+    {
+        my $iter = $inspector->table('child')->pk_foreign_keys();
+        is scalar($iter->all), 0;
+    }
+    {
+        my $iter = $inspector->table('other')->pk_foreign_keys();
+        is scalar($iter->all), 0;
+    }
+    {
+        my $iter = $inspector->table('parent')->fk_foreign_keys();
+        is scalar($iter->all), 0;
+    }
+    {
+        my $iter = $inspector->table('other')->fk_foreign_keys();
+        is scalar($iter->all), 0;
+    }
+    {
+        my $iter = $inspector->table('child')->fk_foreign_keys();
+        my $fk = $iter->next;
+        if (ok $fk, 'fk_foreign_keys') {
+            is $fk->pkcolumn_name, 'id';
+            is $fk->pktable_name, 'parent';
+            is $fk->fktable_name, 'child';
+            is $fk->fkcolumn_name, 'parent_id';
+            is $iter->next, undef;
+        }
+    }
+};
+
 done_testing;
 
