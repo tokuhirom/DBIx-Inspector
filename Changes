@@ -1,5 +1,9 @@
 Revision history for Perl extension DBIx::Inspector
 
+0.04
+
+        - added $column->get($name)
+
 0.03
 
         - fixed typo in docs
