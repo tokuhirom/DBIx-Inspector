@@ -1,7 +1,9 @@
 use strict;
 use warnings;
 use Test::More;
-use Test::Requires 'DBD::SQLite';
+use Test::Requires {
+    'DBD::SQLite' => 1.31
+};
 use DBIx::Inspector;
 
 my $dbh = DBI->connect('dbi:SQLite:', '', '', {RaiseError => 1}) or die;
