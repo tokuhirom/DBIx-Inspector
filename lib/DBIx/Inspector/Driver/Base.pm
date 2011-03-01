@@ -57,8 +57,8 @@ sub columns {
 sub foreign_keys {
     my ($self, @args) = @_;
 
-    my $sth = $self->inspector->dbh->foreign_key_info(@args);
-    Carp::croak($self->inspector->dbh->errstr) unless $sth;
+    my $sth = $self->dbh->foreign_key_info(@args);
+    Carp::croak($self->dbh->errstr) unless $sth;
     my $iter = DBIx::Inspector::Iterator->new(
         callback => sub {
             DBIx::Inspector::ForeignKey->new( inspector => $self, %{ $_[0] } );
