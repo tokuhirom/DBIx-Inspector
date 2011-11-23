@@ -4,6 +4,8 @@ use warnings;
 use utf8;
 use base qw/DBIx::Inspector::Driver::Base/;
 use DBIx::Inspector::ForeignKey::Pg;
+use DBIx::Inspector::Table::Pg;
+use DBIx::Inspector::Column::Pg;
 use DBIx::Inspector::Iterator::Null;
 
 sub new {
@@ -33,6 +35,43 @@ sub foreign_keys {
     );
     return wantarray ? $iter->all : $iter;
 }
+
+sub tables {
+    my ($self, $table) = @_;
+
+    my $sth = $self->{dbh}->table_info( $self->catalog, $self->schema, $table, my $type='TABLE' );
+
+    my $iter = DBIx::Inspector::Iterator->new(
+        callback => sub { DBIx::Inspector::Table::Pg->new(inspector => $self, %{$_[0]}) },
+        sth =>$sth,
+    );
+    return wantarray ? $iter->all : $iter;
+}
+
+sub primary_key {
+    my ($self, $table) = @_;
+
+    my $sth = $self->dbh->primary_key_info( $self->catalog, $self->schema, $table );
+    my $iter = DBIx::Inspector::Iterator->new(
+        callback => sub { DBIx::Inspector::Column::Pg->new(inspector => $self, %{$_[0]}) },
+        sth =>$sth,
+    );
+    return wantarray ? $iter->all : $iter;
+}
+
+sub columns {
+    my ($self, $table, $column) = @_;
+    $column = '%' if not defined $column;
+
+    my $sth = $self->dbh->column_info( $self->catalog, $self->schema, $table, $column );
+    my $iter = DBIx::Inspector::Iterator->new(
+        callback =>
+          sub { DBIx::Inspector::Column::Pg->new( table => $self, %{ $_[0] } ) },
+        sth => $sth,
+    );
+    return wantarray ? $iter->all : $iter;
+}
+
 
 1;
 
