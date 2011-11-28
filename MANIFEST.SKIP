@@ -34,3 +34,4 @@ perltidy.ERR$
 \b\.gitignore
 \.bak$
 ^DBIx-Inspector-
+^inc/
