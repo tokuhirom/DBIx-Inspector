@@ -88,5 +88,28 @@ subtest 'foreign key' => sub {
     }
 };
 
+
+subtest 'system reserved word' => sub {
+    my $dbh = DBI->connect($pgsql->dsn, undef, undef, {Warn => 0, RaiseError => 1}) or die;
+    $dbh->do(q{
+        create table "user" (
+            "user" serial primary key,
+            name varchar(255)
+        );
+    });
+    my $inspector = DBIx::Inspector->new(dbh => $dbh);
+    my @tables = $inspector->tables;
+    ok( grep { $_->name eq 'user' } @tables );
+    my ($user) =  $inspector->table('user');
+    ok $user;
+    is $user->schema, 'public';
+    is $user->type, 'TABLE';
+    is(join(',', sort map { $_->name } $user->columns), 'name,user');
+    is(join(',', sort map { $_->name } $user->primary_key), 'user');
+};
+
+
+
+
 done_testing;
 
