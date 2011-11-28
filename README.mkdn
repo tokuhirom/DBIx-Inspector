@@ -38,7 +38,7 @@ Retrieve table objects from $dbh. Every elements in @tables is instance of [DBIx
 
 # AUTHOR
 
-Tokuhiro Matsuno <tokuhirom AAJKLFJEF GMAIL COM>
+Tokuhiro Matsuno <tokuhirom AAJKLFJEF@ GMAIL COM>
 
 # SEE ALSO
 
