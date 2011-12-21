@@ -14,7 +14,7 @@ sub new {
 sub next {
     my $self = shift;
 
-    if (my $row = $self->sth->fetchrow_hashref()) {
+    if (my $row = $self->sth->fetchrow_hashref('NAME_uc')) {
         if ($self->skip_cb && $self->skip_cb->($row)) {
             return $self->next();
         }
