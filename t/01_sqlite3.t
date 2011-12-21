@@ -7,6 +7,7 @@ use Test::Requires {
 use DBIx::Inspector;
 
 my $dbh = DBI->connect('dbi:SQLite:', '', '', {RaiseError => 1}) or die;
+$dbh->{FetchHashKeyName} = 'NAME_lc'; # test for non default FetchHashKeyName
 $dbh->do(q{
     create table mk (
         k1 int,
