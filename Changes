@@ -1,5 +1,10 @@
 Revision history for Perl extension DBIx::Inspector
 
+0.06
+
+    - fixed fail if $dbh->{FetchHashKeyName} set 'NAME_lc'
+      (nihen)
+
 0.05
 
     - support table and column names for postgresql reserved word
