@@ -2,7 +2,7 @@ package DBIx::Inspector;
 use strict;
 use warnings;
 use 5.008001;
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 use Class::Accessor::Lite;
 Class::Accessor::Lite->mk_accessors(qw/dbh catalog schema driver/);
 use Carp ();
