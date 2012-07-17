@@ -17,7 +17,7 @@ sub new {
         # pg_column contains the unquoted name.
         # DBD::Pg v1.xx does not support the attribue,
         # but don't you use such a old module, do you?
-        $args{ COLUMN_NAME } = $args{ pg_column };
+        $args{ COLUMN_NAME } = $args{ PG_COLUMN };
     }
 
     bless {%args}, $class;
