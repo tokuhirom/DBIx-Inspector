@@ -52,6 +52,9 @@ sub primary_key {
     my ($self, $table) = @_;
 
     my $sth = $self->dbh->primary_key_info( $self->catalog, $self->schema, $table );
+    unless (defined $sth) {
+        return wantarray ? ( ) : DBIx::Inspector::Iterator::Null->new( );
+    }
     my $iter = DBIx::Inspector::Iterator->new(
         callback => sub { DBIx::Inspector::Column::Pg->new(inspector => $self, %{$_[0]}) },
         sth =>$sth,
