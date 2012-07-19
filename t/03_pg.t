@@ -24,9 +24,15 @@ subtest 'basic' => sub {
             name varchar(255)
         );
     });
+    $dbh->do(q{
+        create table nopk (
+            nopk_id serial not null,
+            name varchar(255)
+        );
+    });
     my $inspector = DBIx::Inspector->new(dbh => $dbh);
     my @tables = $inspector->tables;
-    is(join(",", sort map { $_->name } @tables), 'post,usr');
+    is(join(",", sort map { $_->name } @tables), 'nopk,post,usr');
     my ($post) = grep { $_->name eq 'post' } @tables;
     isa_ok $post, 'DBIx::Inspector::Table';
     ok $post;
@@ -34,6 +40,8 @@ subtest 'basic' => sub {
     is $post->type, 'TABLE';
     is(join(',', sort map { $_->name } $post->columns), 'body,post_id,user_id');
     is(join(',', sort map { $_->name } $post->primary_key), 'post_id');
+    my ($nopk) = grep { $_->name eq 'nopk' } @tables;
+    isa_ok $nopk->primary_key, 'DBIx::Inspector::Iterator::Null';
 };
 
 subtest 'foreign key' => sub {
