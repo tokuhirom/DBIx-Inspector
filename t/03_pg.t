@@ -72,18 +72,26 @@ subtest 'foreign key' => sub {
     {
         my $iter = $inspector->table('child')->pk_foreign_keys();
         is $iter->next(), undef;
+        my @fks = $inspector->table('child')->pk_foreign_keys();
+        is scalar @fks, 0;
     }
     {
         my $iter = $inspector->table('parent')->fk_foreign_keys();
         is $iter->next(), undef;
-    }
-    {
-        my $iter = $inspector->table('other')->fk_foreign_keys();
-        is $iter->next(), undef;
+        my @fks = $inspector->table('parent')->fk_foreign_keys();
+        is scalar @fks, 0;
     }
     {
         my $iter = $inspector->table('other')->pk_foreign_keys();
         is $iter->next(), undef;
+        my @fks = $inspector->table('other')->pk_foreign_keys();
+        is scalar @fks, 0;
+    }
+    {
+        my $iter = $inspector->table('other')->fk_foreign_keys();
+        is $iter->next(), undef;
+        my @fks = $inspector->table('other')->fk_foreign_keys();
+        is scalar @fks, 0;
     }
     {
         my $iter = $inspector->table('child')->fk_foreign_keys();
