@@ -1,5 +1,9 @@
 Revision history for Perl extension DBIx::Inspector
 
+0.09 2013-02-20T06:06:22
+
+    - support views
+
 0.08
 
     commit e9e0d8af806d7f6ae796dcd2769d2d452f2fa025
