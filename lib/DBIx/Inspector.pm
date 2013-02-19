@@ -67,6 +67,10 @@ Create new instance of DBIx::Inspector.
 
 Retrieve table objects from $dbh. Every elements in @tables is instance of L<DBIx::Inspector::Table>.
 
+=item my $table = $inspector->table($table_name);
+
+Retrieve table object from $dbh. Return value is instance of L<DBIx::Inspector::Table>.
+
 =back
 
 =head1 AUTHOR
