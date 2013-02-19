@@ -14,8 +14,18 @@ sub new {
 
 sub tables {
     my ($self, $table) = @_;
+    return $self->_tables($table, 'TABLE');
+}
 
-    my $sth = $self->{dbh}->table_info( $self->catalog, $self->schema, $table, my $type='TABLE' );
+sub views {
+    my ($self, $table) = @_;
+    return $self->_tables($table, 'VIEW');
+}
+
+sub _tables {
+    my ($self, $table, $type) = @_;
+
+    my $sth = $self->{dbh}->table_info( $self->catalog, $self->schema, $table, $type );
 
     my $iter = DBIx::Inspector::Iterator->new(
         callback => sub { DBIx::Inspector::Table->new(inspector => $self, %{$_[0]}) },
@@ -28,6 +38,12 @@ sub table {
     my ($self, $table) = @_;
     Carp::croak("missing mandatory parameter: table") unless defined $table;
     return $self->tables($table)->next;
+}
+
+sub view {
+    my ($self, $view) = @_;
+    Carp::croak("missing mandatory parameter: view") unless defined $view;
+    return $self->views($view)->next;
 }
 
 sub primary_key {

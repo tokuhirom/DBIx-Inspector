@@ -71,6 +71,14 @@ Retrieve table objects from $dbh. Every elements in @tables is instance of L<DBI
 
 Retrieve table object from $dbh. Return value is instance of L<DBIx::Inspector::Table>.
 
+=item my @views = $inspector->views();
+
+Retrieve view objects from $dbh. Every elements in @views is instance of L<DBIx::Inspector::Table>.
+
+=item my $view = $inspector->view($view_name);
+
+Retrieve view object from $dbh. Return value is instance of L<DBIx::Inspector::Table>.
+
 =back
 
 =head1 AUTHOR

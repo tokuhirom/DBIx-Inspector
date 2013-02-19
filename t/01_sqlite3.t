@@ -55,6 +55,7 @@ my ($post) = $inspector->tables('post');
 ok $post;
 is(join(',', sort map { $_->name } $post->columns), 'body,post_id,user_id');
 is(join(',', sort map { $_->name } $post->primary_key), 'post_id');
+is(join(',', sort map { $_->name } $inspector->views()), 't2', 'views');
 subtest 'columns' => sub {
     subtest 'body' => sub {
         my $col = $post->column('body');
