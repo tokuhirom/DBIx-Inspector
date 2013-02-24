@@ -13,8 +13,9 @@ sub new {
 }
 
 sub tables {
-    my ($self, $table) = @_;
-    return $self->_tables($table, 'TABLE');
+    my ($self, $table, $type) = @_;
+    $type ||= 'TABLE'; # XXX experimental support
+    return $self->_tables($table, $type);
 }
 
 sub views {

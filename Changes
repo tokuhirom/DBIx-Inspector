@@ -1,5 +1,9 @@
 Revision history for Perl extension DBIx::Inspector
 
+0.10 2013-02-25T06:30:30
+
+    - [EXPERIMENTAL] ->tables method allows table type.
+
 0.09 2013-02-20T06:06:22
 
     - support views
