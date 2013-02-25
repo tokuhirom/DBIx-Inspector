@@ -13,14 +13,26 @@ sub new {
 }
 
 sub tables {
-    my ($self, $table, $type) = @_;
-    $type ||= 'TABLE'; # XXX experimental support
-    return $self->_tables($table, $type);
+    my ($self, $table) = @_;
+    return $self->_tables($table, 'TABLE');
 }
 
 sub views {
     my ($self, $table) = @_;
     return $self->_tables($table, 'VIEW');
+}
+
+# EXPERIMENTAL
+sub tables_and_views {
+    my ($self, $table) = @_;
+    return $self->_tables($table, "'VIEW','TABLE'");
+}
+
+# EXPERIMENTAL
+sub table_or_view {
+    my ($self, $table_or_view) = @_;
+    Carp::croak("missing mandatory parameter: table_or_view") unless defined $table_or_view;
+    return $self->tables_and_views($table_or_view)->next;
 }
 
 sub _tables {
