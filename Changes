@@ -1,5 +1,7 @@
 Revision history for Perl extension DBIx::Inspector
 
+{{$NEXT}}
+
 0.11 2013-02-25T10:41:13
 
     - removed experimental feature introduced in 0.10.

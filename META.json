@@ -1,0 +1,77 @@
+{
+   "abstract" : "Get information from $dbh",
+   "author" : [
+      "Tokuhiro Matsuno <tokuhirom AAJKLFJEF@ GMAIL COM>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Minilla/v0.5.5, CPAN::Meta::Converter version 2.130880",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "DBIx-Inspector",
+   "no_index" : {
+      "directory" : [
+         "t",
+         "xt",
+         "inc",
+         "share",
+         "eg",
+         "examples",
+         "author"
+      ]
+   },
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "Test::More" : "0.98",
+            "Test::Requires" : "0"
+         }
+      },
+      "configure" : {
+         "requires" : {
+            "CPAN::Meta" : "0",
+            "CPAN::Meta::Prereqs" : "0",
+            "Module::Build" : "0.38"
+         }
+      },
+      "develop" : {
+         "requires" : {
+            "Test::CPAN::Meta" : "0",
+            "Test::MinimumVersion" : "0.10108",
+            "Test::Pod" : "1.41",
+            "Test::Spellunker" : "v0.2.7"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "Class::Accessor::Lite" : "0",
+            "DBI" : "0",
+            "Module::Load" : "0",
+            "perl" : "5.008001"
+         }
+      }
+   },
+   "release_status" : "unstable",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/tokuhirom/DBIx-Inspector/issues"
+      },
+      "homepage" : "https://github.com/tokuhirom/DBIx-Inspector",
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/tokuhirom/DBIx-Inspector.git",
+         "web" : "https://github.com/tokuhirom/DBIx-Inspector"
+      }
+   },
+   "version" : "0.11",
+   "x_contributors" : [
+      "makamaka <makamaka.donzoko@gmail.com>",
+      "Masahiro Chiba <chiba@everqueue.com>",
+      "hatyuki29 <hatyuki29@gmail.com>",
+      "tokuhirom <tokuhirom@gmail.com>"
+   ]
+}
