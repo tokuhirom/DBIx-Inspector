@@ -2,6 +2,10 @@ Revision history for Perl extension DBIx::Inspector
 
 {{$NEXT}}
 
+0.12 2013-07-09T03:14:37Z
+
+    - minil migrate
+
 0.11 2013-02-25T10:41:13
 
     - removed experimental feature introduced in 0.10.
