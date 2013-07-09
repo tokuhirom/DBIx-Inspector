@@ -28,23 +28,23 @@ This is under development. __Any API will change without notice.__
 
 # METHODS
 
-- my $inspector = DBIx::Inspector->new(dbh => $dbh);
+- `my $inspector = DBIx::Inspector->new(dbh => $dbh);`
 
     Create new instance of DBIx::Inspector.
 
-- my @tables = $inspector->tables();
+- `my @tables = $inspector->tables();`
 
     Retrieve table objects from $dbh. Every elements in @tables is instance of [DBIx::Inspector::Table](http://search.cpan.org/perldoc?DBIx::Inspector::Table).
 
-- my $table = $inspector->table($table\_name);
+- `my $table = $inspector->table($table_name);`
 
     Retrieve table object from $dbh. Return value is instance of [DBIx::Inspector::Table](http://search.cpan.org/perldoc?DBIx::Inspector::Table).
 
-- my @views = $inspector->views();
+- `my @views = $inspector->views();`
 
     Retrieve view objects from $dbh. Every elements in @views is instance of [DBIx::Inspector::Table](http://search.cpan.org/perldoc?DBIx::Inspector::Table).
 
-- my $view = $inspector->view($view\_name);
+- `my $view = $inspector->view($view_name);`
 
     Retrieve view object from $dbh. Return value is instance of [DBIx::Inspector::Table](http://search.cpan.org/perldoc?DBIx::Inspector::Table).
 

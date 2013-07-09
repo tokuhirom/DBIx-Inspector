@@ -59,23 +59,23 @@ This is under development. B<Any API will change without notice.>
 
 =over 4
 
-=item my $inspector = DBIx::Inspector->new(dbh => $dbh);
+=item C<< my $inspector = DBIx::Inspector->new(dbh => $dbh); >>
 
 Create new instance of DBIx::Inspector.
 
-=item my @tables = $inspector->tables();
+=item C<< my @tables = $inspector->tables(); >>
 
 Retrieve table objects from $dbh. Every elements in @tables is instance of L<DBIx::Inspector::Table>.
 
-=item my $table = $inspector->table($table_name);
+=item C<< my $table = $inspector->table($table_name); >>
 
 Retrieve table object from $dbh. Return value is instance of L<DBIx::Inspector::Table>.
 
-=item my @views = $inspector->views();
+=item C<< my @views = $inspector->views(); >>
 
 Retrieve view objects from $dbh. Every elements in @views is instance of L<DBIx::Inspector::Table>.
 
-=item my $view = $inspector->view($view_name);
+=item C<< my $view = $inspector->view($view_name); >>
 
 Retrieve view object from $dbh. Return value is instance of L<DBIx::Inspector::Table>.
 

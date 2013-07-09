@@ -25,12 +25,6 @@
       ]
    },
    "prereqs" : {
-      "build" : {
-         "requires" : {
-            "Test::More" : "0.98",
-            "Test::Requires" : "0"
-         }
-      },
       "configure" : {
          "requires" : {
             "CPAN::Meta" : "0",
@@ -48,10 +42,16 @@
       },
       "runtime" : {
          "requires" : {
-            "Class::Accessor::Lite" : "0",
+            "Class::Accessor::Lite" : "0.05",
             "DBI" : "0",
             "Module::Load" : "0",
             "perl" : "5.008001"
+         }
+      },
+      "test" : {
+         "requires" : {
+            "Test::More" : "0.98",
+            "Test::Requires" : "0"
          }
       }
    },
