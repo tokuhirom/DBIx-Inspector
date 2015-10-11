@@ -1,13 +1,13 @@
 use strict;
 use warnings;
 use Test::More;
-use Test::Requires 'Test::postgresql', 'DBD::Pg';
+use Test::Requires 'Test::PostgreSQL', 'DBD::Pg';
 use DBIx::Inspector;
 
-push @Test::postgresql::SEARCH_PATHS, '/Library/PostgreSQL/9.0/';
+push @Test::PostgreSQL::SEARCH_PATHS, '/Library/PostgreSQL/9.0/';
 
-my $pgsql = Test::postgresql->new()
-    or plan skip_all => $Test::postgresql::errstr;
+my $pgsql = Test::PostgreSQL->new()
+    or plan skip_all => $Test::PostgreSQL::errstr;
 
 subtest 'basic' => sub {
     my $dbh = DBI->connect($pgsql->dsn, undef, undef, {Warn => 0, RaiseError => 1}) or die;
